@@ -1,0 +1,2898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>六合彩公式验证器 - 完整版</title>
+   <style>
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+       body {
+           font-family: 'Microsoft YaHei', Arial, sans-serif;
+           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+           padding: 0;
+           min-height: 100vh;
+       }
+
+       .container {
+           max-width: 1800px;
+           margin: 0 auto;
+           background: white;
+           box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+           overflow: hidden;
+       }
+
+       .header {
+           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+           color: white;
+           padding: 20px 30px;
+           text-align: center;
+       }
+
+       .header h1 {
+           font-size: 28px;
+           margin-bottom: 5px;
+       }
+
+       .header p {
+           font-size: 13px;
+           opacity: 0.9;
+       }
+
+       .menu-bar {
+           background: #f8f9fa;
+           border-bottom: 2px solid #e0e0e0;
+           display: flex;
+           padding: 0;
+           position: sticky;
+           top: 0;
+           z-index: 100;
+           box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+       }
+
+       .menu-item {
+           position: relative;
+           padding: 12px 20px;
+           cursor: pointer;
+           transition: all 0.3s;
+           border-right: 1px solid #e0e0e0;
+           display: flex;
+           align-items: center;
+           gap: 5px;
+           font-weight: 500;
+           color: #333;
+       }
+
+       .menu-item:hover {
+           background: #667eea;
+           color: white;
+       }
+
+       .menu-item.active {
+           background: #667eea;
+           color: white;
+       }
+
+       .menu-dropdown {
+           display: none;
+           position: absolute;
+           top: 100%;
+           left: 0;
+           background: white;
+           min-width: 320px;
+           box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+           border-radius: 0 0 8px 8px;
+           padding: 15px;
+           z-index: 1000;
+       }
+
+       .menu-item:hover .menu-dropdown {
+           display: block;
+       }
+
+       .dropdown-section {
+           margin-bottom: 15px;
+           padding-bottom: 15px;
+           border-bottom: 1px solid #e0e0e0;
+       }
+
+       .dropdown-section:last-child {
+           border-bottom: none;
+           margin-bottom: 0;
+           padding-bottom: 0;
+       }
+
+       .dropdown-section h4 {
+           color: #667eea;
+           font-size: 13px;
+           margin-bottom: 10px;
+           font-weight: bold;
+       }
+
+       .dropdown-option {
+           display: flex;
+           align-items: center;
+           gap: 10px;
+           margin-bottom: 8px;
+           font-size: 13px;
+       }
+
+       .dropdown-option label {
+           flex: 1;
+           cursor: pointer;
+           color: #333;
+       }
+
+       .dropdown-option select,
+       .dropdown-option input[type="text"] {
+           flex: 1;
+           padding: 5px 8px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+           font-size: 13px;
+       }
+
+       .dropdown-option input[type="checkbox"] {
+           width: 16px;
+           height: 16px;
+           cursor: pointer;
+       }
+
+       .dropdown-btn {
+           width: 100%;
+           padding: 8px;
+           background: #667eea;
+           color: white;
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+           font-size: 13px;
+           margin-top: 10px;
+           transition: all 0.3s;
+       }
+
+       .dropdown-btn:hover {
+           background: #5568d3;
+       }
+
+       .main-content {
+           padding: 20px 30px;
+       }
+
+       .section {
+           margin-bottom: 25px;
+           padding: 20px;
+           background: #f8f9fa;
+           border-radius: 10px;
+           border: 1px solid #e0e0e0;
+       }
+
+       .section-title {
+           font-size: 18px;
+           color: #667eea;
+           margin-bottom: 15px;
+           font-weight: bold;
+           display: flex;
+           align-items: center;
+       }
+
+       .section-title::before {
+           content: '';
+           width: 4px;
+           height: 18px;
+           background: #667eea;
+           margin-right: 10px;
+       }
+
+       .form-group {
+           margin-bottom: 15px;
+       }
+
+       label {
+           display: block;
+           margin-bottom: 5px;
+           font-weight: bold;
+           color: #333;
+           font-size: 14px;
+       }
+
+       input[type="text"], input[type="file"], textarea, select {
+           width: 100%;
+           padding: 10px;
+           border: 2px solid #ddd;
+           border-radius: 5px;
+           font-size: 14px;
+           transition: border-color 0.3s;
+       }
+
+       input[type="text"]:focus, textarea:focus, select:focus {
+           outline: none;
+           border-color: #667eea;
+       }
+
+       textarea {
+           min-height: 150px;
+           font-family: 'Courier New', monospace;
+           resize: vertical;
+       }
+
+       .btn {
+           padding: 12px 30px;
+           border: none;
+           border-radius: 5px;
+           font-size: 16px;
+           cursor: pointer;
+           transition: all 0.3s;
+           margin-right: 10px;
+           margin-bottom: 10px;
+       }
+
+       .btn-primary {
+           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+           color: white;
+       }
+
+       .btn-primary:hover {
+           transform: translateY(-2px);
+           box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+       }
+
+       .btn-secondary {
+           background: #6c757d;
+           color: white;
+       }
+
+       .btn-secondary:hover {
+           background: #5a6268;
+       }
+
+       .btn-success {
+           background: #28a745;
+           color: white;
+       }
+
+       .btn-success:hover {
+           background: #218838;
+       }
+
+       .btn-warning {
+           background: #ffc107;
+           color: #212529;
+       }
+
+       .btn-warning:hover {
+           background: #e0a800;
+       }
+
+       .result-section {
+           background: white;
+           padding: 20px;
+           border-radius: 10px;
+           border: 2px solid #667eea;
+           margin-top: 20px;
+       }
+
+       .result-stats {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+           gap: 15px;
+           margin-bottom: 20px;
+       }
+
+       .stat-card {
+           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+           color: white;
+           padding: 20px;
+           border-radius: 10px;
+           text-align: center;
+       }
+
+       .stat-card .label {
+           font-size: 14px;
+           opacity: 0.9;
+           margin-bottom: 5px;
+       }
+
+       .stat-card .value {
+           font-size: 28px;
+           font-weight: bold;
+       }
+
+       .result-table {
+           width: 100%;
+           border-collapse: collapse;
+           margin-top: 20px;
+           font-size: 12px;
+       }
+
+       .result-table th, .result-table td {
+           padding: 8px;
+           text-align: center;
+           border: 1px solid #ddd;
+       }
+
+       .result-table th {
+           background: #667eea;
+           color: white;
+           font-weight: bold;
+           position: sticky;
+           top: 0;
+           z-index: 10;
+       }
+
+       .result-table tr:nth-child(even) {
+           background: #f8f9fa;
+       }
+
+       .result-table tr:hover {
+           background: #e9ecef;
+       }
+
+       .hit {
+           color: #28a745;
+           font-weight: bold;
+       }
+
+       .miss {
+           color: #dc3545;
+       }
+
+       .calc-detail {
+           font-size: 11px;
+           color: #666;
+           text-align: left;
+           line-height: 1.4;
+       }
+
+       .calc-step {
+           background: #f8f9fa;
+           padding: 3px 5px;
+           margin: 2px 0;
+           border-left: 2px solid #667eea;
+       }
+
+       .formula-examples {
+           background: #fff3cd;
+           padding: 15px;
+           border-radius: 5px;
+           border-left: 4px solid #ffc107;
+           margin-top: 10px;
+           font-size: 13px;
+       }
+
+       .formula-examples h4 {
+           margin-bottom: 10px;
+           color: #856404;
+       }
+
+       .formula-examples code {
+           background: white;
+           padding: 2px 5px;
+           border-radius: 3px;
+           color: #d63384;
+       }
+
+       .error-message, .success-message {
+           padding: 15px;
+           border-radius: 5px;
+           margin-top: 15px;
+       }
+
+       .error-message {
+           background: #f8d7da;
+           color: #721c24;
+           border-left: 4px solid #f5c6cb;
+       }
+
+       .success-message {
+           background: #d4edda;
+           color: #155724;
+           border-left: 4px solid #c3e6cb;
+       }
+
+       .modal {
+           display: none;
+           position: fixed;
+           z-index: 1000;
+           left: 0;
+           top: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0,0,0,0.5);
+       }
+
+       .modal-content {
+           background-color: white;
+           margin: 5% auto;
+           padding: 30px;
+           border-radius: 10px;
+           width: 90%;
+           max-width: 900px;
+           max-height: 80vh;
+           overflow-y: auto;
+       }
+
+       .modal-close {
+           color: #aaa;
+           float: right;
+           font-size: 28px;
+           font-weight: bold;
+           cursor: pointer;
+       }
+
+       .modal-close:hover {
+           color: #000;
+       }
+
+       .batch-result {
+           margin-bottom: 20px;
+           padding: 15px;
+           background: #f8f9fa;
+           border-radius: 8px;
+           border-left: 4px solid #667eea;
+       }
+
+       .batch-result h3 {
+           color: #667eea;
+           margin-bottom: 10px;
+       }
+
+       .period-mode-hint {
+           background: #e3f2fd;
+           padding: 8px;
+           border-radius: 5px;
+           margin-top: 8px;
+           font-size: 12px;
+           color: #1976d2;
+           line-height: 1.5;
+       }
+
+       .settings-indicator {
+           position: fixed;
+           bottom: 20px;
+           right: 20px;
+           background: white;
+           padding: 15px;
+           border-radius: 10px;
+           box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+           font-size: 12px;
+           max-width: 300px;
+           z-index: 99;
+       }
+
+       .settings-indicator h4 {
+           color: #667eea;
+           margin-bottom: 8px;
+           font-size: 14px;
+       }
+
+       .settings-indicator p {
+           margin: 3px 0;
+           color: #666;
+       }
+
+       .prediction-section {
+           background: #fff3cd;
+           padding: 20px;
+           border-radius: 10px;
+           border-left: 4px solid #ffc107;
+           margin-top: 20px;
+       }
+
+       .prediction-section h3 {
+           color: #856404;
+           margin-bottom: 15px;
+       }
+
+       .statistics-section {
+           background: #e3f2fd;
+           padding: 20px;
+           border-radius: 10px;
+           border-left: 4px solid #2196f3;
+           margin-top: 20px;
+       }
+
+       .statistics-section h3 {
+           color: #1976d2;
+           margin-bottom: 15px;
+       }
+
+       .statistics-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+           gap: 15px;
+           margin-top: 20px;
+       }
+       
+       .stat-group {
+           background: white;
+           padding: 15px;
+           border-radius: 8px;
+           border: 1px solid #ddd;
+       }
+       
+       .stat-group h4 {
+           color: #667eea;
+           margin-bottom: 10px;
+           font-size: 14px;
+       }
+       
+       .stat-item {
+           padding: 5px 0;
+           border-bottom: 1px solid #f0f0f0;
+           font-family: 'Courier New', monospace;
+           font-size: 13px;
+       }
+       
+       .stat-count {
+           color: #d32f2f;
+           font-weight: bold;
+       }
+       
+       .stat-items {
+           color: #1976d2;
+       }
+       
+       .stat-total {
+           color: #388e3c;
+           font-weight: bold;
+       }
+
+       .stat-line {
+           padding: 8px;
+           margin: 5px 0;
+           background: white;
+           border-radius: 5px;
+           font-family: 'Courier New', monospace;
+           font-size: 14px;
+           line-height: 1.6;
+       }
+
+       @media (max-width: 768px) {
+           .menu-bar {
+               flex-wrap: wrap;
+           }
+           
+           .menu-item {
+               font-size: 12px;
+               padding: 10px 12px;
+           }
+
+           .menu-dropdown {
+               min-width: 280px;
+           }
+
+           .main-content {
+               padding: 15px;
+           }
+
+           .section {
+               padding: 15px;
+           }
+
+           .result-stats {
+               grid-template-columns: 1fr;
+           }
+
+           .result-table {
+               font-size: 10px;
+           }
+
+           .result-table th, .result-table td {
+               padding: 5px;
+           }
+           
+           .statistics-grid {
+               grid-template-columns: 1fr;
+           }
+       }
+   </style>
+</head>
+<body>
+   <div class="container">
+       <div class="header">
+           <h1>🎰 六合彩公式验证器 - 完整版</h1>
+           <p>支持27种公式类型 | 期号模式选择 | 批量公式验证 | 详细计算过程 | 完整统计分析 | 下期预测</p>
+       </div>
+
+       <!-- 菜单栏 -->
+       <div class="menu-bar">
+           <!-- 期号设置菜单 -->
+           <div class="menu-item">
+               <span>📅</span>
+               <span>期号设置</span>
+               <div class="menu-dropdown">
+                   <div class="dropdown-section">
+                       <h4>期号计算模式</h4>
+                       <div class="dropdown-option">
+                           <select id="periodMode" onchange="updateSettings()">
+                               <option value="current" selected>模式1：本期号=当前计算期</option>
+                               <option value="next">模式2：本期号=下期开奖期</option>
+                           </select>
+                       </div>
+                       <div class="period-mode-hint">
+                           <strong>模式1：</strong>用2025001期号码计算时，所有期号参数=2025001<br>
+                           <strong>模式2：</strong>用2025001期预测2025002期时，参数=2025002
+                       </div>
+                   </div>
+                   <div class="dropdown-section">
+                       <h4>其他选项</h4>
+                       <div class="dropdown-option">
+                           <input type="checkbox" id="includeYear" onchange="updateSettings()">
+                           <label for="includeYear">期号计算包含年份</label>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- 生肖设置菜单 -->
+           <div class="menu-item">
+               <span>🐉</span>
+               <span>生肖设置</span>
+               <div class="menu-dropdown">
+                   <div class="dropdown-section">
+                       <h4>生肖取值范围（年龄类）</h4>
+                       <div class="dropdown-option">
+                           <select id="zodiacRange" onchange="updateSettings()">
+                               <option value="0-11">0到11（当年生肖=0）</option>
+                               <option value="1-12" selected>1到12（当年生肖=1）</option>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="dropdown-section">
+                       <h4>肖位取值范围（排位类）</h4>
+                       <div class="dropdown-option">
+                           <select id="zodiacPosRange" onchange="updateSettings()">
+                               <option value="0-11">0到11（鼠=0）</option>
+                               <option value="1-12" selected>1到12（鼠=1）</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- 属性设置菜单 -->
+           <div class="menu-item">
+               <span>🎨</span>
+               <span>属性设置</span>
+               <div class="menu-dropdown">
+                   <div class="dropdown-section">
+                       <h4>波色取值范围</h4>
+                       <div class="dropdown-option">
+                           <select id="colorRange" onchange="updateSettings()">
+                               <option value="0-2" selected>0到2（红=0，蓝=1，绿=2）</option>
+                               <option value="1-3">1到3（红=1，蓝=2，绿=3）</option>
+                           </select>
+                       </div>
+                   </div>
+                   <div class="dropdown-section">
+                       <h4>五行取值范围</h4>
+                       <div class="dropdown-option">
+                           <select id="elementRange" onchange="updateSettings()">
+                               <option value="0-4" selected>0到4（金=0～土=4）</option>
+                               <option value="1-5">1到5（金=1～土=5）</option>
+                           </select>
+                       </div>
+                       <button class="dropdown-btn" onclick="openElementConfig()">🔧 配置五行号码</button>
+                   </div>
+                   <div class="dropdown-section">
+                       <h4>段数取值范围</h4>
+                       <div class="dropdown-option">
+                           <select id="sectionRange" onchange="updateSettings()">
+                               <option value="0-6">0到6（第1段=0）</option>
+                               <option value="1-7" selected>1到7（第1段=1）</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- 数据管理菜单 -->
+           <div class="menu-item">
+               <span>📊</span>
+               <span>数据管理</span>
+               <div class="menu-dropdown">
+                   <div class="dropdown-section">
+                       <h4>快速操作</h4>
+                       <button class="dropdown-btn" onclick="document.getElementById('fileInput').click()">📂 导入TXT文件</button>
+                       <button class="dropdown-btn" onclick="clearData()">🗑️ 清空所有数据</button>
+                   </div>
+                   <div class="dropdown-section">
+                       <h4>显示选项</h4>
+                       <div class="dropdown-option">
+                           <input type="checkbox" id="reverseOrder">
+                           <label for="reverseOrder">倒序显示数据</label>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <!-- 帮助菜单 -->
+           <div class="menu-item">
+               <span>❓</span>
+               <span>帮助</span>
+               <div class="menu-dropdown">
+                   <div class="dropdown-section">
+                       <h4>常用公式示例</h4>
+                       <div style="font-size: 12px; line-height: 1.6; color: #666;">
+                           <code>平1肖位+平分数=下期杀一肖</code><br>
+                           <code>平分尾+总合尾=下期杀一尾</code><br>
+                           <code>平码三+08=下期杀一肖</code>
+                       </div>
+                   </div>
+                   <div class="dropdown-section">
+                       <h4>批量格式说明</h4>
+                       <div style="font-size: 12px; line-height: 1.6; color: #666;">
+                           批量验证时，直接输入公式即可（每行一个），<br>
+                           会使用当前选择的类型、目标和杀项设置
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+       <div class="main-content">
+           <!-- 数据导入区 -->
+           <div class="section">
+               <div class="section-title">📊 开奖数据导入</div>
+               <input type="file" id="fileInput" accept=".txt" onchange="importFromFile()" style="display: none;">
+               <div class="form-group">
+                   <label>粘贴或编辑数据（格式：期号 平1 平2 平3 平4 平5 平6 特码）</label>
+                   <textarea id="dataInput" placeholder="例如：&#10;2025001 37 34 09 46 16 30 33&#10;2025002 16 27 28 33 12 38 44"></textarea>
+               </div>
+               <button class="btn btn-primary" onclick="importData()">📥 导入数据</button>
+               <div id="importMessage"></div>
+           </div>
+
+           <!-- 公式输入区 -->
+           <div class="section">
+               <div class="section-title">✏️ 公式设置</div>
+               <div class="form-group">
+                   <label>验证模式</label>
+                   <select id="verifyMode" onchange="toggleVerifyMode()">
+                       <option value="single" selected>单公式验证</option>
+                       <option value="batch">批量公式验证</option>
+                   </select>
+               </div>
+
+               <!-- 公式类型、验证目标、杀项类型（共用） -->
+               <div class="form-group">
+                   <label>公式类型</label>
+                   <select id="formulaType">
+                       <option value="L" selected>L类公式（落球序）</option>
+                       <option value="D">D类公式（大小序）</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label>验证目标</label>
+                   <select id="verifyTarget">
+                       <option value="特码" selected>特码</option>
+                       <option value="平码">平码（6个平码任意一个）</option>
+                       <option value="平特">平特（7个号码任意一个）</option>
+                       <option value="平1位">平1位</option>
+                       <option value="平2位">平2位</option>
+                       <option value="平3位">平3位</option>
+                       <option value="平4位">平4位</option>
+                       <option value="平5位">平5位</option>
+                       <option value="平6位">平6位</option>
+                   </select>
+               </div>
+               <div class="form-group">
+                   <label>杀项类型</label>
+                   <select id="killType">
+                       <option value="杀一码">杀一码</option>
+                       <option value="杀合尾">杀合尾</option>
+                       <option value="杀一肖">杀一肖</option>
+                       <option value="杀肖位">杀肖位</option>
+                       <option value="杀一尾">杀一尾</option>
+                       <option value="杀一段">杀一段</option>
+                       <option value="杀半波">杀半波</option>
+                       <option value="杀一头">杀一头</option>
+                       <option value="杀一行">杀一行</option>
+                       <option value="杀一门">杀一门</option>
+                       <option value="杀大小双">杀大小双</option>
+                       <option value="杀半单双">杀半单双</option>
+                       <option value="杀一波">杀一波</option>
+                       <option value="杀单双">杀单双</option>
+                       <option value="杀大小">杀大小</option>
+                       <option value="杀合大小">杀合大小</option>
+                       <option value="杀合单双">杀合单双</option>
+                       <option value="杀尾大小">杀尾大小</option>
+                       <option value="杀七余">杀七余</option>
+                       <option value="杀六余">杀六余</option>
+                       <option value="杀五余">杀五余</option>
+                       <option value="杀四余">杀四余</option>
+                       <option value="杀三余">杀三余</option>
+                       <option value="杀一合">杀一合</option>
+                       <option value="杀半头">杀半头</option>
+                       <option value="杀七肖">杀七肖</option>
+                       <option value="杀九肖">杀九肖</option>
+                       <option value="杀平特肖">杀平特肖</option>
+                   </select>
+               </div>
+
+               <!-- 单公式模式 -->
+               <div id="singleFormulaSection">
+                   <div class="form-group">
+                       <label>输入公式</label>
+                       <input type="text" id="formulaInput" placeholder="例如：平1肖位+平分数+总分合+期数尾">
+                   </div>
+               </div>
+
+               <!-- 批量公式模式 -->
+               <div id="batchFormulaSection" style="display: none;">
+                   <div class="form-group">
+                       <label>批量输入公式（每行一个，直接输入公式即可）</label>
+                       <textarea id="batchFormulaInput" style="min-height: 200px;" placeholder="示例：&#10;平1肖位+平分数&#10;平码三+08&#10;平分尾+总合尾"></textarea>
+                   </div>
+                   <div class="formula-examples">
+                       <h4>💡 批量公式格式说明：</h4>
+                       <p>直接输入公式即可，每行一个</p>
+                       <p>会使用上方选择的类型、目标和杀项设置</p>
+                       <p>示例：</p>
+                       <p><code>平1肖位+平分数</code></p>
+                       <p><code>平分尾+总合尾</code></p>
+                   </div>
+               </div>
+
+               <div class="form-group">
+                   <label>验证期数范围（可选）</label>
+                   <div style="display: flex; gap: 10px;">
+                       <input type="text" id="startPeriod" placeholder="起始期号" style="flex: 1;">
+                       <input type="text" id="endPeriod" placeholder="结束期号" style="flex: 1;">
+                   </div>
+               </div>
+
+               <button class="btn btn-primary" onclick="calculateFormula()">🧮 开始验证</button>
+               <button class="btn btn-warning" onclick="calculateLatestUnopened()">🔮 计算未开出结果</button>
+               <button class="btn btn-success" onclick="exportToExcel()">📤 导出Excel</button>
+           </div>
+
+           <!-- 结果显示区 -->
+           <div id="resultSection" style="display: none;">
+               <div class="section">
+                   <div class="section-title">📈 验证结果</div>
+                   <div id="batchResultsContainer"></div>
+                   <div id="singleResultContainer"></div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <!-- 当前设置提示 -->
+   <div class="settings-indicator" id="settingsIndicator">
+       <h4>⚙️ 当前设置</h4>
+       <p id="settingsPeriodMode"></p>
+       <p id="settingsZodiac"></p>
+       <p id="settingsColor"></p>
+   </div>
+
+   <!-- 五行配置弹窗 -->
+   <div id="elementModal" class="modal">
+       <div class="modal-content">
+           <span class="modal-close" onclick="closeElementConfig()">&times;</span>
+           <h2 style="color: #667eea; margin-bottom: 20px;">⚙️ 五行号码配置</h2>
+           <div class="form-group">
+               <label>选择年份</label>
+               <select id="elementYear" onchange="loadElementConfig()">
+                   <option value="2025" selected>2025年</option>
+                   <option value="2024">2024年</option>
+                   <option value="2023">2023年</option>
+               </select>
+           </div>
+           <div style="display: grid; grid-template-columns: 60px 1fr; gap: 10px; align-items: center;">
+               <label style="font-weight: bold; color: #667eea;">金：</label>
+               <input type="text" id="element_jin" placeholder="用空格分隔">
+               <label style="font-weight: bold; color: #667eea;">木：</label>
+               <input type="text" id="element_mu" placeholder="用空格分隔">
+               <label style="font-weight: bold; color: #667eea;">水：</label>
+               <input type="text" id="element_shui" placeholder="用空格分隔">
+               <label style="font-weight: bold; color: #667eea;">火：</label>
+               <input type="text" id="element_huo" placeholder="用空格分隔">
+               <label style="font-weight: bold; color: #667eea;">土：</label>
+               <input type="text" id="element_tu" placeholder="用空格分隔">
+           </div>
+           <div style="margin-top: 20px;">
+               <button class="btn btn-primary" onclick="saveElementConfig()">💾 保存配置</button>
+               <button class="btn btn-secondary" onclick="closeElementConfig()">取消</button>
+           </div>
+       </div>
+   </div>
+
+   <script>
+       // 全局变量
+       let lotteryData = [];
+       let calculationResults = [];
+       let batchResults = [];
+
+       // 五行配置
+       let elementConfigs = {
+           2025: {
+               '金': [7,8,15,16,23,24,37,38,45,46],
+               '木': [5,6,19,20,27,28,35,36,49],
+               '水': [3,4,11,12,25,26,33,34,41,42],
+               '火': [13,14,21,22,29,30,43,44],
+               '土': [1,2,9,10,17,18,31,32,39,40,47,48]
+           }
+       };
+
+       // 生肖数据
+       const zodiacYearData = {
+           2025: { year: '蛇', mapping: {
+               '蛇': [1,13,25,37,49], '龙': [2,14,26,38], '兔': [3,15,27,39],
+               '虎': [4,16,28,40], '牛': [5,17,29,41], '鼠': [6,18,30,42],
+               '猪': [7,19,31,43], '狗': [8,20,32,44], '鸡': [9,21,33,45],
+               '猴': [10,22,34,46], '羊': [11,23,35,47], '马': [12,24,36,48]
+           }}
+       };
+
+       // 生肖位置（固定不变）
+       const zodiacPosition = {
+           '鼠': [1,13,25,37,49], '牛': [2,14,26,38], '虎': [3,15,27,39],
+           '兔': [4,16,28,40], '龙': [5,17,29,41], '蛇': [6,18,30,42],
+           '马': [7,19,31,43], '羊': [8,20,32,44], '猴': [9,21,33,45],
+           '鸡': [10,22,34,46], '狗': [11,23,35,47], '猪': [12,24,36,48]
+       };
+
+       // 波色属性
+       const colorMap = {
+           '红': [1,2,7,8,12,13,18,19,23,24,29,30,34,35,40,45,46],
+           '蓝': [3,4,9,10,14,15,20,25,26,31,36,37,41,42,47,48],
+           '绿': [5,6,11,16,17,21,22,27,28,32,33,38,39,43,44,49]
+       };
+
+       // 初始化设置
+       function updateSettings() {
+           const periodMode = document.getElementById('periodMode').value;
+           const zodiacRange = document.getElementById('zodiacRange').value;
+           const colorRange = document.getElementById('colorRange').value;
+           
+           document.getElementById('settingsPeriodMode').textContent = 
+               `期号模式：${periodMode === 'current' ? '本期号=当前期' : '本期号=下期号'}`;
+           document.getElementById('settingsZodiac').textContent = 
+               `生肖范围：${zodiacRange}`;
+           document.getElementById('settingsColor').textContent = 
+               `波色范围：${colorRange}`;
+       }
+
+       // 切换验证模式
+       function toggleVerifyMode() {
+           const mode = document.getElementById('verifyMode').value;
+           if (mode === 'batch') {
+               document.getElementById('singleFormulaSection').style.display = 'none';
+               document.getElementById('batchFormulaSection').style.display = 'block';
+           } else {
+               document.getElementById('singleFormulaSection').style.display = 'block';
+               document.getElementById('batchFormulaSection').style.display = 'none';
+           }
+       }
+
+       // 从文件导入数据
+       function importFromFile() {
+           const file = document.getElementById('fileInput').files[0];
+           if (!file) return;
+           const reader = new FileReader();
+           reader.onload = function(e) {
+               document.getElementById('dataInput').value = e.target.result;
+               importData();
+           };
+           reader.readAsText(file, 'UTF-8');
+       }
+
+       // 导入数据
+       function importData() {
+           const dataInput = document.getElementById('dataInput').value.trim();
+           if (!dataInput) {
+               showMessage('importMessage', '❌ 请输入开奖数据！', 'error');
+               return;
+           }
+
+           try {
+               lotteryData = [];
+               const lines = dataInput.split('\n');
+               for (let line of lines) {
+                   line = line.trim();
+                   if (!line) continue;
+                   const parts = line.split(/\s+/);
+                   if (parts.length !== 8) throw new Error(`数据格式错误：${line}`);
+                   lotteryData.push({
+                       period: parts[0],
+                       numbers: parts.slice(1, 7).map(n => parseInt(n)),
+                       numbersOriginal: parts.slice(1, 7).map(n => parseInt(n)),
+                       special: parseInt(parts[7])
+                   });
+               }
+               if (document.getElementById('reverseOrder').checked) {
+                   lotteryData.reverse();
+               }
+               showMessage('importMessage', `✅ 成功导入 ${lotteryData.length} 期数据！`, 'success');
+           } catch (error) {
+               showMessage('importMessage', `❌ 导入失败：${error.message}`, 'error');
+           }
+       }
+
+       // 清空数据
+       function clearData() {
+           if (!confirm('确定要清空所有数据吗？')) return;
+           document.getElementById('dataInput').value = '';
+           lotteryData = [];
+           calculationResults = [];
+           batchResults = [];
+           document.getElementById('resultSection').style.display = 'none';
+           showMessage('importMessage', '✅ 数据已清空！', 'success');
+       }
+
+       // 打开五行配置
+       function openElementConfig() {
+           document.getElementById('elementModal').style.display = 'block';
+           loadElementConfig();
+       }
+
+       // 关闭五行配置
+       function closeElementConfig() {
+           document.getElementById('elementModal').style.display = 'none';
+       }
+
+       // 加载五行配置
+       function loadElementConfig() {
+           const year = document.getElementById('elementYear').value;
+           const config = elementConfigs[year];
+           if (config) {
+               document.getElementById('element_jin').value = config['金'].map(n => String(n).padStart(2, '0')).join(' ');
+               document.getElementById('element_mu').value = config['木'].map(n => String(n).padStart(2, '0')).join(' ');
+               document.getElementById('element_shui').value = config['水'].map(n => String(n).padStart(2, '0')).join(' ');
+               document.getElementById('element_huo').value = config['火'].map(n => String(n).padStart(2, '0')).join(' ');
+               document.getElementById('element_tu').value = config['土'].map(n => String(n).padStart(2, '0')).join(' ');
+           }
+       }
+
+       // 保存五行配置
+       function saveElementConfig() {
+           const year = document.getElementById('elementYear').value;
+           try {
+               elementConfigs[year] = {
+                   '金': document.getElementById('element_jin').value.trim().split(/\s+/).map(n => parseInt(n)).filter(n => !isNaN(n)),
+                   '木': document.getElementById('element_mu').value.trim().split(/\s+/).map(n => parseInt(n)).filter(n => !isNaN(n)),
+                   '水': document.getElementById('element_shui').value.trim().split(/\s+/).map(n => parseInt(n)).filter(n => !isNaN(n)),
+                   '火': document.getElementById('element_huo').value.trim().split(/\s+/).map(n => parseInt(n)).filter(n => !isNaN(n)),
+                   '土': document.getElementById('element_tu').value.trim().split(/\s+/).map(n => parseInt(n)).filter(n => !isNaN(n))
+               };
+               alert(`✅ ${year}年五行配置已保存！`);
+               closeElementConfig();
+           } catch (error) {
+               alert(`❌ 保存失败：${error.message}`);
+           }
+       }
+
+       // 计算公式
+       function calculateFormula() {
+           if (lotteryData.length === 0) {
+               alert('❌ 请先导入开奖数据！');
+               return;
+           }
+           const mode = document.getElementById('verifyMode').value;
+           if (mode === 'batch') {
+               calculateBatchFormulas();
+           } else {
+               calculateSingleFormula();
+           }
+       }
+
+       // 计算单公式
+       function calculateSingleFormula() {
+           const formula = document.getElementById('formulaInput').value.trim();
+           if (!formula) {
+               alert('❌ 请输入公式！');
+               return;
+           }
+
+           const formulaType = document.getElementById('formulaType').value;
+           const verifyTarget = document.getElementById('verifyTarget').value;
+           const killType = document.getElementById('killType').value;
+
+           try {
+               const fullFormula = `${formula}=下期${killType}`;
+               const results = verifyFormula(fullFormula, formulaType, verifyTarget);
+               const prediction = predictNextPeriod(fullFormula, formulaType, verifyTarget);
+               
+               calculationResults = results;
+               displaySingleResult(prediction);
+           } catch (error) {
+               alert(`❌ 计算错误：${error.message}`);
+           }
+       }
+
+       // 计算批量公式 - 修改为使用统一设置
+       function calculateBatchFormulas() {
+           const batchInput = document.getElementById('batchFormulaInput').value.trim();
+           if (!batchInput) {
+               alert('❌ 请输入批量公式！');
+               return;
+           }
+
+           try {
+               const formulaType = document.getElementById('formulaType').value;
+               const verifyTarget = document.getElementById('verifyTarget').value;
+               const killType = document.getElementById('killType').value;
+
+               const lines = batchInput.split('\n').filter(line => line.trim());
+               batchResults = [];
+               let successCount = 0;
+               let failCount = 0;
+
+               for (let line of lines) {
+                   line = line.trim();
+                   if (!line) continue;
+
+                   const fullFormula = `${line}=下期${killType}`;
+
+                   try {
+                       const results = verifyFormula(fullFormula, formulaType, verifyTarget);
+                       const prediction = predictNextPeriod(fullFormula, formulaType, verifyTarget);
+                       
+                       batchResults.push({
+                           formula: line,
+                           formulaType: formulaType,
+                           verifyTarget: verifyTarget,
+                           killType: killType,
+                           results: results,
+                           prediction: prediction
+                       });
+                       successCount++;
+                   } catch (error) {
+                       console.error(`公式计算错误：${line}`, error);
+                       failCount++;
+                   }
+               }
+
+               if (successCount === 0) {
+                   alert(`❌ 没有成功验证任何公式！\n失败：${failCount}条`);
+                   return;
+               }
+
+               const batchStatistics = generateBatchStatistics(batchResults);
+               displayBatchResults(batchStatistics);
+               
+               if (failCount > 0) {
+                   alert(`⚠️ 批量验证完成！\n成功：${successCount}条\n失败：${failCount}条`);
+               }
+           } catch (error) {
+               alert(`❌ 批量计算错误：${error.message}`);
+               console.error(error);
+           }
+       }
+
+       // 计算最新一期未开出的结果
+       function calculateLatestUnopened() {
+           if (lotteryData.length === 0) {
+               alert('❌ 请先导入开奖数据！');
+               return;
+           }
+
+           const mode = document.getElementById('verifyMode').value;
+           if (mode === 'batch') {
+               const batchInput = document.getElementById('batchFormulaInput').value.trim();
+               if (!batchInput) {
+                   alert('❌ 请输入批量公式！');
+                   return;
+               }
+
+               try {
+                   const formulaType = document.getElementById('formulaType').value;
+                   const verifyTarget = document.getElementById('verifyTarget').value;
+                   const killType = document.getElementById('killType').value;
+
+                   const lines = batchInput.split('\n').filter(line => line.trim());
+                   const latestData = lotteryData[lotteryData.length - 1];
+                   const unopenedResults = [];
+
+                   for (let line of lines) {
+                       line = line.trim();
+                       if (!line) continue;
+
+                       let calcNumbers = formulaType === 'D' ? 
+                           [...latestData.numbers].sort((a, b) => a - b) : 
+                           [...latestData.numbersOriginal];
+
+                       const periodMode = document.getElementById('periodMode').value;
+                       const periodToUse = periodMode === 'next' ? 
+                           getNextPeriod(latestData.period) : latestData.period;
+
+                       const calcDetails = [];
+                       const calcValue = calculateLeftPartWithDetails(line, calcNumbers, latestData.special, periodToUse, calcDetails);
+                       
+                       const killResult = calculateKillResult(calcValue, killType, getNextPeriod(latestData.period));
+
+                       unopenedResults.push({
+                           formula: line,
+                           formulaType: formulaType,
+                           verifyTarget: verifyTarget,
+                           calcValue: calcValue,
+                           calcDetails: calcDetails,
+                           killResult: killResult,
+                           killType: killType
+                       });
+                   }
+
+                   displayUnopenedResults(unopenedResults);
+               } catch (error) {
+                   alert(`❌ 计算未开出结果错误：${error.message}`);
+               }
+           } else {
+               alert('❌ 请切换到批量验证模式使用此功能！');
+           }
+       }
+
+       // 辅助函数：获取下一期期号
+       function getNextPeriod(currentPeriod) {
+           const yearPart = currentPeriod.substring(0, 4);
+           const numPart = parseInt(currentPeriod.substring(4));
+           return yearPart + String(numPart + 1).padStart(3, '0');
+       }
+
+       // 显示未开出结果
+       function displayUnopenedResults(results) {
+           const container = document.getElementById('batchResultsContainer');
+           let html = '<h2 style="color: #667eea; margin-bottom: 20px;">🔮 最新一期未开出结果统计</h2>';
+           
+           // 生成统计
+           const statistics = {};
+           const killType = results.length > 0 ? results[0].killType : '';
+           
+           // 根据杀项类型确定所有可能的元素
+           const allPossibleItems = getAllPossibleKillItems(killType);
+           
+           // 初始化统计对象
+           if (killType) {
+               statistics[killType] = {};
+               allPossibleItems.forEach(item => {
+                   statistics[killType][item] = 0;
+               });
+           }
+           
+           // 统计出现次数
+           results.forEach(result => {
+               result.killResult.numbers.forEach(num => {
+                   // 根据杀项类型格式化显示
+                   let displayItem = formatKillItem(num, result.killType);
+                   statistics[result.killType][displayItem]++;
+               });
+           });
+
+           // 格式化统计结果
+           html += '<div class="statistics-section">';
+           html += '<h3>📊 未开出号码统计</h3>';
+           html += '<div class="statistics-grid">';
+           
+           for (let [killTypeKey, items] of Object.entries(statistics)) {
+               const countData = {};
+               
+               // 按出现次数分组
+               for (let [item, count] of Object.entries(items)) {
+                   if (!countData[count]) {
+                       countData[count] = [];
+                   }
+                   countData[count].push(item);
+               }
+               
+               html += `
+                   <div class="stat-group">
+                       <h4>${killTypeKey}统计：</h4>
+               `;
+               
+               const counts = Object.keys(countData).map(Number).sort((a, b) => b - a);
+               
+               counts.forEach(count => {
+                   const itemsList = countData[count];
+                   if (itemsList.length > 0) {
+                       html += `
+                           <div class="stat-item">
+                               <span class="stat-count">〖${count}次〗</span>：
+                               <span class="stat-items">${itemsList.join(',')}</span>
+                               <span class="stat-total">(共${itemsList.length}个)</span>
+                           </div>
+                       `;
+                   }
+               });
+               
+               html += `</div>`;
+           }
+           
+           html += '</div></div>';
+           
+           // 显示详细结果
+           html += '<div class="prediction-section">';
+           html += '<h3>📋 详细计算结果</h3>';
+           html += '<table class="result-table">';
+           html += `
+               <thead>
+                   <tr>
+                       <th>公式</th>
+                       <th>计算过程</th>
+                       <th>计算值</th>
+                       <th>预测杀项</th>
+                   </tr>
+               </thead>
+               <tbody>
+           `;
+           
+           results.forEach(result => {
+               const calcDetailHTML = result.calcDetails.join(' + ');
+               html += `
+                   <tr>
+                       <td style="text-align: left; font-size: 12px;">${result.formula}</td>
+                       <td style="text-align: left; font-size: 11px;">${calcDetailHTML}</td>
+                       <td><strong>${result.calcValue}</strong></td>
+                       <td><strong style="color: #d32f2f;">${result.killType}: ${result.killResult.display}</strong></td>
+                   </tr>
+               `;
+           });
+           
+           html += '</tbody></table></div>';
+           
+           container.innerHTML = html;
+           document.getElementById('singleResultContainer').innerHTML = '';
+           document.getElementById('resultSection').style.display = 'block';
+           document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+       }
+
+       // 获取所有可能的杀项元素
+       function getAllPossibleKillItems(killType) {
+           const period = lotteryData.length > 0 ? lotteryData[0].period : '2025001';
+           const year = parseInt(period.substring(0, 4));
+           const zodiacData = zodiacYearData[year] || zodiacYearData[2025];
+           
+           switch(killType) {
+               case '杀一码':
+                   return Array.from({length: 49}, (_, i) => String(i + 1).padStart(2, '0'));
+               case '杀一肖':
+                   return Object.keys(zodiacData.mapping);
+               case '杀肖位':
+                   return Object.keys(zodiacPosition);
+               case '杀一尾':
+                   return Array.from({length: 10}, (_, i) => i + '尾');
+               case '杀一头':
+                   return ['0头', '1头', '2头', '3头', '4头'];
+               case '杀一段':
+                   const sectionRange = document.getElementById('sectionRange').value;
+                   const maxSection = sectionRange === '0-6' ? 6 : 7;
+                   return Array.from({length: maxSection + 1}, (_, i) => {
+                       return sectionRange === '0-6' ? i + '段' : (i === 0 ? i + '段' : i + '段');
+                   }).filter((_, i) => sectionRange === '0-6' ? true : i > 0);
+               case '杀一行':
+                   return ['金', '木', '水', '火', '土'];
+               case '杀一波':
+                   return ['红', '蓝', '绿'];
+               case '杀半波':
+                   return ['红双', '红单', '蓝双', '蓝单', '绿双', '绿单'];
+               case '杀大小双':
+               case '杀半单双':
+                   return ['小双', '小单', '大双', '大单'];
+               case '杀单双':
+                   return ['单', '双'];
+               case '杀大小':
+                   return ['小', '大'];
+               case '杀合大小':
+                   return ['合小', '合大'];
+               case '杀合单双':
+                   return ['合双', '合单'];
+               case '杀尾大小':
+                   return ['尾小', '尾大'];
+               case '杀合尾':
+                   return Array.from({length: 10}, (_, i) => i + '合尾');
+               case '杀一合':
+                   return Array.from({length: 13}, (_, i) => String(i + 1).padStart(2, '0') + '合');
+               case '杀一门':
+                   return ['1门', '2门', '3门', '4门', '5门'];
+               case '杀半头':
+                   return ['0头双', '0头单', '1头双', '1头单', '2头双', '2头单', '3头双', '3头单', '4头双', '4头单'];
+               case '杀七余':
+                   return Array.from({length: 7}, (_, i) => '7余' + i);
+               case '杀六余':
+                   return Array.from({length: 6}, (_, i) => '6余' + i);
+               case '杀五余':
+                   return Array.from({length: 5}, (_, i) => '5余' + i);
+               case '杀四余':
+                   return Array.from({length: 4}, (_, i) => '4余' + i);
+               case '杀三余':
+                   return Array.from({length: 3}, (_, i) => '3余' + i);
+               default:
+                   return [];
+           }
+       }
+
+       // 格式化杀项显示
+       function formatKillItem(num, killType) {
+           if (killType === '杀一肖') {
+               return getZodiacNameByNumber(num);
+           } else if (killType === '杀一尾') {
+               return num + '尾';
+           } else if (killType === '杀一头') {
+               return num + '头';
+           } else if (killType === '杀一段') {
+               return num + '段';
+           } else if (killType === '杀一门') {
+               return num + '门';
+           } else if (killType === '杀一行') {
+               return getElementNameByNumber(num);
+           } else if (killType === '杀肖位') {
+               return getZodiacPositionNameByNumber(num);
+           } else {
+               return String(num).padStart(2, '0');
+           }
+       }
+
+       // 辅助函数：根据数字获取生肖名称
+       function getZodiacNameByNumber(num) {
+           const period = lotteryData.length > 0 ? lotteryData[0].period : '2025001';
+           const year = parseInt(period.substring(0, 4));
+           const zodiacData = zodiacYearData[year] || zodiacYearData[2025];
+           
+           for (let [name, numbers] of Object.entries(zodiacData.mapping)) {
+               if (numbers.includes(num)) {
+                   return name;
+               }
+           }
+           return '未知';
+       }
+
+       // 辅助函数：根据数字获取生肖位置名称
+       function getZodiacPositionNameByNumber(num) {
+           for (let [name, numbers] of Object.entries(zodiacPosition)) {
+               if (numbers.includes(num)) {
+                   return name;
+               }
+           }
+           return '未知';
+       }
+
+       // 辅助函数：根据数字获取五行名称
+       function getElementNameByNumber(num) {
+           const period = lotteryData.length > 0 ? lotteryData[0].period : '2025001';
+           const year = parseInt(period.substring(0, 4));
+           const config = elementConfigs[year] || elementConfigs[2025];
+           const elements = ['金', '木', '水', '火', '土'];
+           
+           for (let element of elements) {
+               if (config[element].includes(num)) {
+                   return element;
+               }
+           }
+           return '未知';
+       }
+
+       // 预测下期
+       function predictNextPeriod(formula, formulaType, verifyTarget) {
+           if (lotteryData.length === 0) return null;
+           
+           const lastData = lotteryData[lotteryData.length - 1];
+           const lastPeriod = lastData.period;
+           
+           const yearPart = lastPeriod.substring(0, 4);
+           const numPart = parseInt(lastPeriod.substring(4));
+           const nextPeriod = yearPart + String(numPart + 1).padStart(3, '0');
+           
+           let calcNumbers = formulaType === 'D' ? 
+               [...lastData.numbers].sort((a, b) => a - b) : 
+               [...lastData.numbersOriginal];
+
+           const periodMode = document.getElementById('periodMode').value;
+           const periodToUse = periodMode === 'next' ? nextPeriod : lastPeriod;
+
+           const calcDetails = [];
+           const [leftPart, rightPart] = formula.split('=').map(p => p.trim());
+           const calcValue = calculateLeftPartWithDetails(leftPart, calcNumbers, lastData.special, periodToUse, calcDetails);
+           
+           const killType = parseKillType(rightPart);
+           const killResult = calculateKillResult(calcValue, killType, nextPeriod);
+
+           return {
+               period: nextPeriod,
+               calcValue: calcValue,
+               calcDetails: calcDetails,
+               killResult: killResult,
+               killType: killType
+           };
+       }
+
+       // 生成批量统计 - 修复统计逻辑
+       function generateBatchStatistics(batchResults) {
+           const statistics = {};
+           
+           // 首先确定杀项类型并初始化所有可能的元素
+           if (batchResults.length > 0 && batchResults[0].prediction) {
+               const killType = batchResults[0].prediction.killType;
+               const allPossibleItems = getAllPossibleKillItems(killType);
+               
+               statistics[killType] = {};
+               // 初始化所有可能的元素为0
+               allPossibleItems.forEach(item => {
+                   statistics[killType][item] = 0;
+               });
+           }
+
+           // 统计实际出现的次数
+           batchResults.forEach((batch) => {
+               if (batch.prediction) {
+                   const killType = batch.prediction.killType;
+                   const killResult = batch.prediction.killResult;
+                   
+                   killResult.numbers.forEach(num => {
+                       const displayItem = formatKillItem(num, killType);
+                       if (statistics[killType]) {
+                           statistics[killType][displayItem]++;
+                       }
+                   });
+               }
+           });
+
+           // 重新组织统计数据，按次数分组
+           const finalStatistics = {};
+           
+           for (let [killType, items] of Object.entries(statistics)) {
+               finalStatistics[killType] = {};
+               
+               // 按出现次数分组
+               for (let [item, count] of Object.entries(items)) {
+                   if (!finalStatistics[killType][count]) {
+                       finalStatistics[killType][count] = [];
+                   }
+                   finalStatistics[killType][count].push(item);
+               }
+           }
+
+           return finalStatistics;
+       }
+
+       // 显示批量结果
+       function displayBatchResults(batchStatistics) {
+           document.getElementById('resultSection').style.display = 'block';
+           document.getElementById('singleResultContainer').innerHTML = '';
+           
+           const container = document.getElementById('batchResultsContainer');
+           let html = '<h2 style="color: #667eea; margin-bottom: 20px;">📊 批量验证结果</h2>';
+           
+           // 显示预测结果
+           if (batchResults.length > 0 && batchResults[0].prediction) {
+               html += `
+                   <div class="prediction-section">
+                       <h3>🔮 预测下期：${batchResults[0].prediction.period}</h3>
+                       <table class="result-table" style="margin-top: 10px;">
+                           <thead>
+                               <tr>
+                                   <th>公式</th>
+                                   <th>计算过程</th>
+                                   <th>计算值</th>
+                                   <th>预测杀项</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+               `;
+               
+               batchResults.forEach((batch, index) => {
+                   if (batch.prediction) {
+                       const calcDetailHTML = batch.prediction.calcDetails.join(' + ');
+                       html += `
+                           <tr>
+                               <td style="text-align: left; font-size: 12px;">${batch.formula}</td>
+                               <td style="text-align: left; font-size: 11px;">${calcDetailHTML}</td>
+                               <td><strong>${batch.prediction.calcValue}</strong></td>
+                               <td><strong style="color: #d32f2f;">${batch.prediction.killType}: ${batch.prediction.killResult.display}</strong></td>
+                           </tr>
+                       `;
+                   }
+               });
+               
+               html += `
+                           </tbody>
+                       </table>
+                   </div>
+               `;
+           }
+
+           // 显示统计结果
+           if (Object.keys(batchStatistics).length > 0) {
+               html += '<div class="statistics-section">';
+               html += '<h3>📈 批量统计结果</h3>';
+               html += '<div class="statistics-grid">';
+               
+               for (let [killType, countData] of Object.entries(batchStatistics)) {
+                   html += `
+                       <div class="stat-group">
+                           <h4>${killType}统计：</h4>
+                   `;
+                   
+                   const counts = Object.keys(countData).map(Number).sort((a, b) => b - a);
+                   
+                   counts.forEach(count => {
+                       const items = countData[count];
+                       if (items.length > 0) {
+                           html += `
+                               <div class="stat-item">
+                                   <span class="stat-count">〖${count}次〗</span>：
+                                   <span class="stat-items">${items.join(',')}</span>
+                                   <span class="stat-total">(共${items.length}个)</span>
+                               </div>
+                           `;
+                       }
+                   });
+                   
+                   html += `</div>`;
+               }
+               
+               html += '</div></div>';
+           }
+
+           // 显示每个公式的详细结果
+           batchResults.forEach((batch, index) => {
+               const stats = calculateStats(batch.results);
+               html += `
+                   <div class="batch-result">
+                       <h3>公式${index + 1}：${batch.formula}</h3>
+                       <div class="result-stats">
+                           ${generateStatsHTML(stats)}
+                       </div>
+                       <div style="overflow-x: auto; max-height: 400px; margin-top: 15px;">
+                           ${generateResultTable(batch.results)}
+                       </div>
+                   </div>
+               `;
+           });
+           
+           container.innerHTML = html;
+           document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+       }
+
+       // 显示单结果
+       function displaySingleResult(prediction) {
+           document.getElementById('resultSection').style.display = 'block';
+           document.getElementById('batchResultsContainer').innerHTML = '';
+           
+           const container = document.getElementById('singleResultContainer');
+           const stats = calculateStats(calculationResults);
+           
+           let html = '';
+           
+           if (prediction) {
+               const calcDetailHTML = prediction.calcDetails.map(d => `<div class="calc-step">${d}</div>`).join('');
+               html += `
+                   <div class="prediction-section">
+                       <h3>🔮 预测下期：${prediction.period}</h3>
+                       <div style="background: white; padding: 15px; border-radius:5px; margin-top: 10px;">
+                           <p><strong>计算过程：</strong></p>
+                           <div class="calc-detail">${calcDetailHTML}</div>
+                           <p style="margin-top: 10px;"><strong>计算值：</strong><span style="font-size: 18px; color: #667eea; margin-left: 10px;">${prediction.calcValue}</span></p>
+                           <p style="margin-top: 10px;"><strong>预测结果：</strong><span style="font-size: 18px; color: #d32f2f; margin-left: 10px;">${prediction.killType}: ${prediction.killResult.display}</span></p>
+                       </div>
+                   </div>
+               `;
+           }
+           
+           html += `
+               <div class="result-stats">
+                   ${generateStatsHTML(stats)}
+               </div>
+               <div style="overflow-x: auto; max-height: 600px;">
+                   ${generateResultTable(calculationResults)}
+               </div>
+           `;
+           
+           container.innerHTML = html;
+           document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+       }
+
+       // 验证公式
+       function verifyFormula(formula, formulaType, verifyTarget) {
+           let leftPart, rightPart;
+           const parts = formula.split('=');
+           if (parts.length !== 2) throw new Error('公式格式错误');
+           leftPart = parts[0].trim();
+           rightPart = parts[1].trim();
+
+           const startPeriod = document.getElementById('startPeriod').value.trim();
+           const endPeriod = document.getElementById('endPeriod').value.trim();
+           
+           let dataToVerify = [...lotteryData];
+           if (startPeriod && endPeriod) {
+               dataToVerify = dataToVerify.filter(d => d.period >= startPeriod && d.period <= endPeriod);
+           }
+
+           if (dataToVerify.length < 2) throw new Error('数据不足');
+
+           const results = [];
+           const periodMode = document.getElementById('periodMode').value;
+
+           for (let i = 0; i < dataToVerify.length - 1; i++) {
+               const currentData = dataToVerify[i];
+               const nextData = dataToVerify[i + 1];
+               
+               let calcNumbers = formulaType === 'D' ? 
+                   [...currentData.numbers].sort((a,b) => a - b) : 
+                   [...currentData.numbersOriginal];
+
+               const periodToUse = periodMode === 'next' ? nextData.period : currentData.period;
+
+               const calcDetails = [];
+               const calcValue = calculateLeftPartWithDetails(leftPart, calcNumbers, currentData.special, periodToUse, calcDetails);
+               
+               const killType = parseKillType(rightPart);
+               const killResult = calculateKillResult(calcValue, killType, nextData.period);
+               
+               const isKillAppeared = verifyKillAppeared(killResult, killType, nextData, verifyTarget);
+               const isHit = !isKillAppeared;
+
+               results.push({
+                   period: nextData.period,
+                   numbers: nextData.numbers,
+                   special: nextData.special,
+                   verifyTarget: verifyTarget,
+                   calcValue: calcValue,
+                   calcDetails: calcDetails,
+                   killResult: killResult,
+                   killType: killType,
+                   isHit: isHit,
+                   periodUsed: periodToUse
+               });
+           }
+
+           return results;
+       }
+
+       // 计算左侧部分（带详情）
+       function calculateLeftPartWithDetails(leftPart, numbers, special, period, details) {
+           const parts = leftPart.split('+').map(p => p.trim());
+           let total = 0;
+
+           for (let part of parts) {
+               if (/^\d+$/.test(part)) {
+                   const value = parseInt(part);
+                   total += value;
+                   details.push(`${part} = ${value}`);
+                   continue;
+               }
+
+               const value = parseParameterWithDetails(part, numbers, special, period, details);
+               total += value;
+           }
+
+           return total;
+       }
+
+       // 解析参数（带详情） - 保持原有逻辑
+       function parseParameterWithDetails(param, numbers, special, period, details) {
+           param = param.trim();
+           const numMap = {'一':0, '二':1, '三':2, '四':3, '五':4, '六':5, '1':0, '2':1, '3':2, '4':3, '5':4, '6':5};
+           
+           for (let [name, index] of Object.entries(numMap)) {
+               const patterns = [`平码${name}码`, `平码${name}`, `平${name}`];
+               for (let pattern of patterns) {
+                   if (param.startsWith(pattern)) {
+                       const num = numbers[index];
+                       const suffix = param.substring(pattern.length);
+                       let value = num;
+                       let desc = `平${name}码(${String(num).padStart(2,'0')})`;
+                       
+                       const suffixHandlers = [
+                           { suffix: '段', handler: () => {
+                               value = getSectionValue(num);
+                               desc += `段 = ${value}`;
+                           }},
+                           { suffix: '行', handler: () => {
+                               value = getElementValue(num, period);
+                               const elements = ['金', '木', '水', '火', '土'];
+                               const range = document.getElementById('elementRange').value;
+                               const baseValue = range === '0-4' ? 0 : 1;
+                               desc += `行(${elements[value - baseValue]}) = ${value}`;
+                           }},
+                           { suffix: '大小', handler: () => {
+                               value = num >= 25 ? 1 : 0;
+                               desc += `大小(${value === 1 ? '大' : '小'}) = ${value}`;
+                           }},
+                           { suffix: '半波', handler: () => {
+                               value = getHalfColorValue(num);
+                               const halfColors = ['红双', '红单', '蓝双', '蓝单', '绿双', '绿单'];
+                               desc += `半波(${halfColors[value]}) = ${value}`;
+                           }},
+                           { suffix: '大小双', handler: () => {
+                               value = getBigSmallOddEven(num);
+                               const dxd = ['小双', '小单', '大双', '大单'];
+                               desc += `大小双(${dxd[value]}) = ${value}`;
+                           }},
+                           { suffix: '合单', handler: () => {
+                               const he = Math.floor(num / 10) + (num % 10);
+                               value = he % 2;
+                               desc += `合单(${num}→${he}=${value === 1 ? '单' : '双'}) = ${value}`;
+                           }},
+                           { suffix: '半头', handler: () => {
+                               value = getHalfHeadValue(num);
+                               const head = Math.floor(num / 10);
+                               const tailParity = (num % 10) % 2 === 1 ? '单' : '双';
+                               desc += `半头(${head}头${tailParity}) = ${value}`;
+                           }},
+                           { suffix: '门', handler: () => {
+                               value = getMenValue(num);
+                               desc += `门 = ${value}门`;
+                           }},
+                           { suffix: '肖位', handler: () => {
+                               value = getZodiacPositionValue(num);
+                               const range = document.getElementById('zodiacPosRange').value;
+                               const baseValue = range === '0-11' ? 0 : 1;
+                               const zodiacNames = Object.keys(zodiacPosition);
+                               const zodiacName = zodiacNames[(value - baseValue) % 12];
+                               desc += `肖位(${zodiacName}) = ${value}`;
+                           }},
+                           { suffix: '半单双', handler: () => {
+                               value = getBigSmallOddEven(num);
+                               const dxd = ['小双', '小单', '大双', '大单'];
+                               desc += `半单双(${dxd[value]}) = ${value}`;
+                           }},
+                           { suffix: '半单', handler: () => {
+                               value = getBigSmallOddEven(num);
+                               const dxd = ['小双', '小单', '大双', '大单'];
+                               desc += `半单(${dxd[value]}) = ${value}`;
+                           }},
+                           { suffix: '合尾', handler: () => {
+                               const he = Math.floor(num / 10) + (num % 10);
+                               value = he % 10;
+                               desc += `合尾(${num}→${he}) = ${value}`;
+                           }},
+                           { suffix: '头', handler: () => {
+                               value = Math.floor(num / 10);
+                               desc += `头 = ${value}`;
+                           }},
+                           { suffix: '尾', handler: () => {
+                               value = num % 10;
+                               desc += `尾 = ${value}`;
+                           }},
+                           { suffix: '合', handler: () => {
+                               value = Math.floor(num / 10) + (num % 10);
+                               desc += `合(${Math.floor(num/10)}+${num%10}) = ${value}`;
+                           }},
+                           { suffix: '波', handler: () => {
+                               value = getColorValue(num);
+                               const range = document.getElementById('colorRange').value;
+                               const baseValue = range === '0-2' ? 0 : 1;
+                               const colorNames = ['红', '蓝', '绿'];
+                               desc += `波(${colorNames[value - baseValue]}) = ${value}`;
+                           }},
+                           { suffix: '肖', handler: () => {
+                               value = getZodiacAge(num, period);
+                               desc += `肖 = ${value}`;
+                           }}
+                       ];
+                       
+                       suffixHandlers.sort((a, b) => b.suffix.length - a.suffix.length);
+                       
+                       let matched = false;
+                       for (let handler of suffixHandlers) {
+                           if (suffix === handler.suffix) {
+                               handler.handler();
+                               matched = true;
+                               break;
+                           }
+                       }
+                       
+                       if (!matched && suffix === '') {
+                           desc = `平${name}码 = ${value}`;
+                       }
+                       
+                       details.push(desc);
+                       return value;
+                   }
+               }
+           }
+
+           const heWeiMatch = param.match(/^([1-6一二三四五六])合尾$/);
+           if (heWeiMatch) {
+               const indexMap = {'1':0, '2':1, '3':2, '4':3, '5':4, '6':5, '一':0, '二':1, '三':2, '四':3, '五':4, '六':5};
+               const index = indexMap[heWeiMatch[1]];
+               const num = numbers[index];
+               const he = Math.floor(num / 10) + (num % 10);
+               const value = he % 10;
+               details.push(`${heWeiMatch[1]}合尾(平${index+1}=${num}→${he}) = ${value}`);
+               return value;
+           }
+
+           const wuxingMatch = param.match(/^([1-6一二三四五六])五行$/);
+           if (wuxingMatch) {
+               const indexMap = {'1':0, '2':1, '3':2, '4':3, '5':4, '6':5, '一':0, '二':1, '三':2, '四':3, '五':4, '六':5};
+               const index = indexMap[wuxingMatch[1]];
+               const num = numbers[index];
+               const value = getElementValue(num, period);
+               const elements = ['金', '木', '水', '火', '土'];
+               const range = document.getElementById('elementRange').value;
+               const baseValue = range === '0-4' ? 0 : 1;
+               details.push(`${wuxingMatch[1]}五行(平${index+1}=${num}=${elements[value - baseValue]}) = ${value}`);
+               return value;
+           }
+
+           if (param.startsWith('特码') || param.startsWith('特')) {
+               const suffix = param.replace('特码', '').replace('特', '');
+               let value = special;
+               let desc = `特码(${String(special).padStart(2,'0')})`;
+               
+               const specialHandlers = [
+                   { suffix: '段', handler: () => {
+                       value = getSectionValue(special);
+                       desc += `段 = ${value}`;
+                   }},
+                   { suffix: '行', handler: () => {
+                       value = getElementValue(special, period);
+                       const elements = ['金', '木', '水', '火', '土'];
+                       const range = document.getElementById('elementRange').value;
+                       const baseValue = range === '0-4' ? 0 : 1;
+                       desc += `行(${elements[value - baseValue]}) = ${value}`;
+                   }},
+                   { suffix: '肖位', handler: () => {
+                       value = getZodiacPositionValue(special);
+                       const range = document.getElementById('zodiacPosRange').value;
+                       const baseValue = range === '0-11' ? 0 : 1;
+                       const zodiacNames = Object.keys(zodiacPosition);
+                       const zodiacName = zodiacNames[(value - baseValue) % 12];
+                       desc += `肖位(${zodiacName}) = ${value}`;
+                   }},
+                   { suffix: '波', handler: () => {
+                       value = getColorValue(special);
+                       const range = document.getElementById('colorRange').value;
+                       const baseValue = range === '0-2' ? 0 : 1;
+                       const colorNames = ['红', '蓝', '绿'];
+                       desc += `波(${colorNames[value - baseValue]}) = ${value}`;
+                   }},
+                   { suffix: '肖', handler: () => {
+                       value = getZodiacAge(special, period);
+                       desc += `肖 = ${value}`;
+                   }},
+                   { suffix: '合单', handler: () => {
+                       const he = Math.floor(special / 10) + (special % 10);
+                       value = he % 2;
+                       desc += `合单(${special}→${he}=${value === 1 ? '单' : '双'}) = ${value}`;
+                   }},
+                   { suffix: '大小', handler: () => {
+                       value = special >= 25 ? 1 : 0;
+                       desc += `大小(${value === 1 ? '大' : '小'}) = ${value}`;
+                   }},
+                   { suffix: '半单', handler: () => {
+                       value = getBigSmallOddEven(special);
+                       const dxd = ['小双', '小单', '大双', '大单'];
+                       desc += `半单双(${dxd[value]}) = ${value}`;
+                   }},
+                   { suffix: '大小双', handler: () => {
+                       value = getBigSmallOddEven(special);
+                       const dxd = ['小双', '小单', '大双', '大单'];
+                       desc += `大小双(${dxd[value]}) = ${value}`;
+                   }},
+                   { suffix: '半单双', handler: () => {
+                       value = getBigSmallOddEven(special);
+                       const dxd = ['小双', '小单', '大双', '大单'];
+                       desc += `半单双(${dxd[value]}) = ${value}`;
+                   }},
+                   { suffix: '半头', handler: () => {
+                       value = getHalfHeadValue(special);
+                       const head = Math.floor(special / 10);
+                       const tailParity = (special % 10) % 2 === 1 ? '单' : '双';
+                       desc += `半头(${head}头${tailParity}) = ${value}`;
+                   }},
+                   { suffix: '半波', handler: () => {
+                       value = getHalfColorValue(special);
+                       const halfColors = ['红双', '红单', '蓝双', '蓝单', '绿双', '绿单'];
+                       desc += `半波(${halfColors[value]}) = ${value}`;
+                   }},
+                   { suffix: '头', handler: () => {
+                       value = Math.floor(special / 10);
+                       desc += `头 = ${value}`;
+                   }},
+                   { suffix: '尾', handler: () => {
+                       value = special % 10;
+                       desc += `尾 = ${value}`;
+                   }},
+                   { suffix: '合', handler: () => {
+                       value = Math.floor(special / 10) + (special % 10);
+                       desc += `合 = ${value}`;
+                   }},
+                   { suffix: '合尾', handler: () => {
+                       const he = Math.floor(special / 10) + (special % 10);
+                       value = he % 10;
+                       desc += `合尾 = ${value}`;
+                   }},
+                   { suffix: '门', handler: () => {
+                       value = getMenValue(special);
+                       desc += `门 = ${value}门`;
+                   }}
+               ];
+               
+               specialHandlers.sort((a, b) => b.suffix.length - a.suffix.length);
+               
+               let matched = false;
+               for (let handler of specialHandlers) {
+                   if (suffix === handler.suffix) {
+                       handler.handler();
+                       matched = true;
+                       break;
+                   }
+               }
+               
+               if (!matched && suffix === '') {
+                   desc = `特码 = ${value}`;
+               }
+               
+               details.push(desc);
+               return value;
+           }
+
+           const pingTotal = numbers.reduce((a, b) => a + b, 0);
+           
+           if (param === '平分数') {
+               details.push(`平分数(${numbers.map(n => String(n).padStart(2,'0')).join('+')}) = ${pingTotal}`);
+               return pingTotal;
+           }
+           if (param === '平分尾') {
+               const value = pingTotal % 10;
+               details.push(`平分尾(${pingTotal}) = ${value}`);
+               return value;
+           }
+           if (param === '平分合') {
+               const value = String(pingTotal).split('').reduce((a, b) => a + parseInt(b), 0);
+               details.push(`平分合(${pingTotal}→${String(pingTotal).split('').join('+')}) = ${value}`);
+               return value;
+           }
+           if (param === '平合尾') {
+               const pingHe = String(pingTotal).split('').reduce((a, b) => a + parseInt(b), 0);
+               const value = pingHe % 10;
+               details.push(`平合尾(${pingTotal}→${pingHe}) = ${value}`);
+               return value;
+           }
+
+           const total = pingTotal + special;
+           
+           if (param === '总分数') {
+               details.push(`总分数(平分${pingTotal}+特${special}) = ${total}`);
+               return total;
+           }
+           if (param === '总分尾') {
+               const value = total % 10;
+               details.push(`总分尾(${total}) = ${value}`);
+               return value;
+           }
+           if (param === '总分合') {
+               const value = String(total).split('').reduce((a, b) => a + parseInt(b), 0);
+               details.push(`总分合(${total}→${String(total).split('').join('+')}) = ${value}`);
+               return value;
+           }
+           if (param === '总合尾') {
+               const totalHe = String(total).split('').reduce((a, b) => a + parseInt(b), 0);
+               const value = totalHe % 10;
+               details.push(`总合尾(${total}→${totalHe}) = ${value}`);
+               return value;
+           }
+
+           const includeYear = document.getElementById('includeYear').checked;
+           let periodNum = includeYear ? parseInt(period) : parseInt(period.slice(-3));
+
+           if (param === '总期数' || param === '本期数' || param === '本期号' || param === '期号') {
+               details.push(`总期数[${period}] = ${periodNum}`);
+               return periodNum;
+           }
+           if (param === '年期数' || param === '年期号') {
+               const yearPeriod = parseInt(period.slice(-3));
+               details.push(`年期数 = ${yearPeriod}`);
+               return yearPeriod;
+           }
+           if (param === '期数尾' || param === '期尾') {
+               const value = periodNum % 10;
+               details.push(`期数尾[${period}] = ${value}`);
+               return value;
+           }
+           if (param === '期数合' || param === '期合') {
+               const value = String(periodNum).split('').reduce((a, b) => a + parseInt(b), 0);
+               details.push(`期数合[${period}] = ${value}`);
+               return value;
+           }
+           if (param === '期合尾') {
+               const periodHe = String(periodNum).split('').reduce((a, b) => a + parseInt(b), 0);
+               const value = periodHe % 10;
+               details.push(`期合尾[${period}] = ${value}`);
+               return value;
+           }
+
+           if (param.includes('上期')) {
+               const currentIndex = lotteryData.findIndex(d => d.period === period);
+               let prevPeriodNum = 0;
+               
+               if (currentIndex > 0) {
+                   const prevPeriod = lotteryData[currentIndex - 1].period;
+                   prevPeriodNum = includeYear ? parseInt(prevPeriod) : parseInt(prevPeriod.slice(-3));
+               } else {
+                   prevPeriodNum = includeYear ? parseInt(period) - 1 : parseInt(period.slice(-3)) - 1;
+               }
+               
+               if (param === '上期数' || param === '上期号') {
+                   details.push(`上期数 = ${prevPeriodNum}`);
+                   return prevPeriodNum;
+               }
+               if (param === '上期尾') {
+                   const value = prevPeriodNum % 10;
+                   details.push(`上期尾 = ${value}`);
+                   return value;
+               }
+               if (param === '上期合') {
+                   const value = String(prevPeriodNum).split('').reduce((a, b) => a + parseInt(b), 0);
+                   details.push(`上期合 = ${value}`);
+                   return value;
+               }
+           }
+
+           details.push(`${param} = 0 (未识别)`);
+           return 0;
+       }
+
+       // 获取生肖位置值
+       function getZodiacPositionValue(num) {
+           const range = document.getElementById('zodiacPosRange').value;
+           const baseValue = range === '0-11' ? 0 : 1;
+           
+           for (let [name, nums] of Object.entries(zodiacPosition)) {
+               if (nums.includes(num)) {
+                   const zodiacNames = Object.keys(zodiacPosition);
+                   const index = zodiacNames.indexOf(name);
+                   return baseValue + index;
+               }
+           }
+           return baseValue;
+       }
+
+       // 获取波色值
+       function getColorValue(num) {
+           const range = document.getElementById('colorRange').value;
+           const baseValue = range === '0-2' ? 0 : 1;
+           for (let [color, nums] of Object.entries(colorMap)) {
+               if (nums.includes(num)) {
+                   if (color === '红') return baseValue + 0;
+                   if (color === '蓝') return baseValue + 1;
+                   if (color === '绿') return baseValue + 2;
+               }
+           }
+           return baseValue;
+       }
+
+       // 获取生肖年龄值
+       function getZodiacAge(num, period) {
+           const year = parseInt(period.substring(0, 4));
+           const zodiac = zodiacYearData[year] || zodiacYearData[2025];
+           const range = document.getElementById('zodiacRange').value;
+           const baseValue = range === '0-11' ? 0 : 1;
+           for (let [name, nums] of Object.entries(zodiac.mapping)) {
+               if (nums.includes(num)) {
+                   const zodiacNames = Object.keys(zodiac.mapping);
+                   return baseValue + zodiacNames.indexOf(name);
+               }
+           }
+           return baseValue;
+       }
+
+       // 获取段数值
+       function getSectionValue(num) {
+           const range = document.getElementById('sectionRange').value;
+           const baseValue = range === '0-6' ? 0 : 1;
+           return baseValue + Math.floor((num - 1) / 7);
+       }
+
+       // 获取五行值
+       function getElementValue(num, period) {
+           const year = parseInt(period.substring(0, 4));
+           const config = elementConfigs[year] || elementConfigs[2025];
+           const range = document.getElementById('elementRange').value;
+           const baseValue = range === '0-4' ? 0 : 1;
+           
+           const elements = ['金', '木', '水', '火', '土'];
+           for (let i = 0; i < elements.length; i++) {
+               if (config[elements[i]].includes(num)) {
+                   return baseValue + i;
+               }
+           }
+           return baseValue;
+       }
+
+       // 获取门数值
+       function getMenValue(num) {
+           return Math.ceil(num / 10);
+       }
+
+       // 获取半波值
+       function getHalfColorValue(num) {
+           const isOdd = num % 2 === 1;
+           for (let [color, nums] of Object.entries(colorMap)) {
+               if (nums.includes(num)) {
+                   if (color === '红') return isOdd ? 1 : 0;
+                   if (color === '蓝') return isOdd ? 3 : 2;
+                   if (color === '绿') return isOdd ? 5 : 4;
+               }
+           }
+           return 0;
+       }
+
+       // 获取大小单双值
+       function getBigSmallOddEven(num) {
+           const isBig = num >= 25;
+           const isOdd = num % 2 === 1;
+           if (!isBig && !isOdd) return 0;
+           if (!isBig && isOdd) return 1;
+           if (isBig && !isOdd) return 2;
+           return 3;
+       }
+
+       // 获取半头值
+       function getHalfHeadValue(num) {
+           const head = Math.floor(num / 10);
+           const tailIsOdd = (num % 10) % 2 === 1;
+           return head * 2 + (tailIsOdd ? 1 : 0);
+       }
+
+       // 解析杀项类型
+       function parseKillType(rightPart) {
+           rightPart = rightPart.replace(/下期|杀|中/g, '').trim();
+           
+           const killTypeMap = {
+               '一码': '杀一码',
+               '合尾': '杀合尾',
+               '一肖': '杀一肖',
+               '肖位': '杀肖位',
+               '一尾': '杀一尾',
+               '一段': '杀一段',
+               '半波': '杀半波',
+               '一头': '杀一头',
+               '一行': '杀一行',
+               '一门': '杀一门',
+               '大小双': '杀大小双',
+               '半单双': '杀半单双',
+               '一波': '杀一波',
+               '单双': '杀单双',
+               '大小': '杀大小',
+               '合大小': '杀合大小',
+               '合单双': '杀合单双',
+               '尾大小': '杀尾大小',
+               '七余': '杀七余',
+               '六余': '杀六余',
+               '五余': '杀五余',
+               '四余': '杀四余',
+               '三余': '杀三余',
+               '一合': '杀一合',
+               '半头': '杀半头',
+               '七肖': '杀七肖',
+               '九肖': '杀九肖',
+               '平特肖': '杀平特肖'
+           };
+           
+           for (let [key, value] of Object.entries(killTypeMap)) {
+               if (rightPart.includes(key)) {
+                   return value;
+               }
+           }
+           
+           return '杀一码';
+       }
+
+       // 计算杀项结果 - 保持原有逻辑
+       function calculateKillResult(calcValue, killType, period) {
+           const result = {};
+           
+           switch(killType) {
+               case '杀一码':
+                   let maValue = calcValue % 49;
+                   if (maValue === 0) maValue = 49;
+                   result.display = String(maValue).padStart(2, '0');
+                   result.numbers = [maValue];
+                   break;
+                   
+               case '杀合尾':
+                   const heweiValue = calcValue % 10;
+                   result.display = heweiValue + '合尾';
+                   result.numbers = getNumbersByHeWei(heweiValue);
+                   break;
+                   
+               case '杀一肖':
+                   let zodiacValue = calcValue % 12;
+                   const zodiacRange = document.getElementById('zodiacRange').value;
+                   if (zodiacRange === '1-12' && zodiacValue === 0) zodiacValue = 12;
+                   const year = parseInt(period.substring(0, 4));
+                   const zodiacData = zodiacYearData[year] || zodiacYearData[2025];
+                   const zodiacNames = Object.keys(zodiacData.mapping);
+                   const zodiacIndex = zodiacRange === '0-11' ? zodiacValue : zodiacValue - 1;
+                   result.display = zodiacNames[zodiacIndex];
+                   result.numbers = zodiacData.mapping[result.display];
+                   break;
+                   
+               case '杀肖位':
+                   let xiaoweiValue = calcValue % 12;
+                   const zodiacPosRange = document.getElementById('zodiacPosRange').value;
+                   if (zodiacPosRange === '1-12' && xiaoweiValue === 0) xiaoweiValue = 12;
+                   const zodiacPosNames = Object.keys(zodiacPosition);
+                   const zodiacPosIndex = zodiacPosRange === '0-11' ? xiaoweiValue : xiaoweiValue - 1;
+                   result.display = zodiacPosNames[zodiacPosIndex];
+                   result.numbers = zodiacPosition[result.display];
+                   break;
+                   
+               case '杀一尾':
+                   const weiValue = calcValue % 10;
+                   result.display = weiValue + '尾';
+                   result.numbers = [];
+                   for (let i = weiValue; i <= 49; i += 10) {
+                       if (i > 0) result.numbers.push(i);
+                   }
+                   break;
+                   
+               case '杀一段':
+                   let duanValue = calcValue % 7;
+                   const sectionRange = document.getElementById('sectionRange').value;
+                   if (sectionRange === '1-7' && duanValue === 0) duanValue = 7;
+                   else if (sectionRange === '0-6') {
+                       duanValue = duanValue;
+                   }
+                   result.display = duanValue + '段';
+                   result.numbers = getNumbersBySection(duanValue, sectionRange);
+                   break;
+                   
+               case '杀半波':
+                   const banboValue = calcValue % 6;
+                   result.display = getHalfColorName(banboValue);
+                   result.numbers = getNumbersByHalfColor(banboValue);
+                   break;
+                   
+               case '杀一头':
+                   let touValue = calcValue % 5;
+                   if (touValue === 0) touValue = 4;
+                   else touValue = touValue - 1;
+                   result.display = touValue + '头';
+                   result.numbers = [];
+                   for (let i = touValue * 10 + 1; i <= touValue * 10 + 10 && i <= 49; i++) {
+                       result.numbers.push(i);
+                   }
+                   break;
+                   
+               case '杀一行':
+                   let wuxingValue = calcValue % 5;
+                   const elementRange = document.getElementById('elementRange').value;
+                   if (elementRange === '1-5' && wuxingValue === 0) wuxingValue = 5;
+                   const elements = ['金', '木', '水', '火', '土'];
+                   const baseValue = elementRange === '0-4' ? 0 : 1;
+                   result.display = elements[wuxingValue - baseValue];
+                   result.numbers = getNumbersByElement(result.display, period);
+                   break;
+                   
+               case '杀一门':
+                   let menValue = calcValue % 5;
+                   if (menValue === 0) menValue = 4;
+                   else menValue = menValue - 1;
+                   result.display = (menValue + 1) + '门';
+                   result.numbers = [];
+                   for (let i = menValue * 10 + 1; i <= menValue * 10 + 10 && i <= 49; i++) {
+                       result.numbers.push(i);
+                   }
+                   break;
+                   
+               case '杀大小双':
+               case '杀半单双':
+                   const dxdValue = calcValue % 4;
+                   result.display = getBigSmallOddEvenName(dxdValue);
+                   result.numbers = getNumbersByBigSmallOddEven(dxdValue);
+                   break;
+                   
+               case '杀一波':
+                   let boValue = calcValue % 3;
+                   const colorRange = document.getElementById('colorRange').value;
+                   if (colorRange === '1-3' && boValue === 0) boValue = 3;
+                   const colors = ['红', '蓝', '绿'];
+                   const colorBase = colorRange === '0-2' ? 0 : 1;
+                   result.display = colors[boValue - colorBase];
+                   result.numbers = colorMap[result.display];
+                   break;
+                   
+               case '杀单双':
+                   const dsValue = calcValue % 2;
+                   result.display = dsValue === 0 ? '双' : '单';
+                   result.numbers = getNumbersByOddEven(dsValue);
+                   break;
+                   
+               case '杀大小':
+                   const dxValue = calcValue % 2;
+                   result.display = dxValue === 0 ? '小' : '大';
+                   result.numbers = getNumbersByBigSmall(dxValue);
+                   break;
+                   
+               case '杀合大小':
+                   const hdxValue = calcValue % 2;
+                   result.display = hdxValue === 0 ? '合小' : '合大';
+                   result.numbers = getNumbersByHeBigSmall(hdxValue);
+                   break;
+                   
+               case '杀合单双':
+                   const hdsValue = calcValue % 2;
+                   result.display = hdsValue === 0 ? '合双' : '合单';
+                   result.numbers = getNumbersByHeOddEven(hdsValue);
+                   break;
+                   
+               case '杀尾大小':
+                   const wdxValue = calcValue % 2;
+                   result.display = wdxValue === 0 ? '尾小' : '尾大';
+                   result.numbers = getNumbersByWeiBigSmall(wdxValue);
+                   break;
+                   
+               case '杀七余':
+                   const yu7Value = calcValue % 7;
+                   result.display = '7余' + yu7Value;
+                   result.numbers = getNumbersByYu7(yu7Value);
+                   break;
+                   
+               case '杀六余':
+                   const yu6Value = calcValue % 6;
+                   result.display = '6余' + yu6Value;
+                   result.numbers = getNumbersByYu6(yu6Value);
+                   break;
+                   
+               case '杀五余':
+                   const yu5Value = calcValue % 5;
+                   result.display = '5余' + yu5Value;
+                   result.numbers = getNumbersByYu5(yu5Value);
+                   break;
+                   
+               case '杀四余':
+                   const yu4Value = calcValue % 4;
+                   result.display = '4余' + yu4Value;
+                   result.numbers = getNumbersByYu4(yu4Value);
+                   break;
+                   
+               case '杀三余':
+                   const yu3Value = calcValue % 3;
+                   result.display = '3余' + yu3Value;
+                   result.numbers = getNumbersByYu3(yu3Value);
+                   break;
+                   
+               case '杀一合':
+                   let heValue = calcValue % 13;
+                   if (heValue === 0) heValue = 13;
+                   result.display = String(heValue).padStart(2, '0') + '合';
+                   result.numbers = getNumbersByHe(heValue);
+                   break;
+                   
+               case '杀半头':
+                   const bantouValue = calcValue % 10;
+                   result.display = getHalfHeadName(bantouValue);
+                   result.numbers = getNumbersByHalfHead(bantouValue);
+                   break;
+                   
+               case '杀七肖':
+                   const qixiaoValue = calcValue % 12;
+                   result.display = '七肖';
+                   result.numbers = getNumbersBySevenZodiac(qixiaoValue, period);
+                   break;
+                   
+               case '杀九肖':
+                   const jiuxiaoValue = calcValue % 12;
+                   result.display = '九肖';
+                   result.numbers = getNumbersByNineZodiac(jiuxiaoValue, period);
+                   break;
+                   
+               case '杀平特肖':
+                   const pingtexiaoValue = calcValue % 12;
+                   result.display = '平特肖';
+                   result.numbers = getNumbersByPingteZodiac(pingtexiaoValue, period);
+                   break;
+                   
+               default:
+                   let defaultValue = calcValue % 49;
+                   if (defaultValue === 0) defaultValue = 49;
+                   result.display = String(defaultValue).padStart(2, '0');
+                   result.numbers = [defaultValue];
+           }
+           
+           return result;
+       }
+
+       // 辅助函数定义（保持原有实现）
+       function getNumbersByHeWei(hewei) {
+           const heweiMap = {
+               0: [19,28,37,46],
+               1: [1,10,29,38,47],
+               2: [2,11,20,39,48],
+               3: [3,12,21,30,49],
+               4: [4,13,22,31,40],
+               5: [5,14,23,32,41],
+               6: [6,15,24,33,42],
+               7: [7,16,25,34,43],
+               8: [8,17,26,35,44],
+               9: [9,18,27,36,45]
+           };
+           return heweiMap[hewei] || [];
+       }
+
+       function getNumbersBySection(duan, range) {
+           const sections = {
+               0: [1,2,3,4,5,6,7],
+               1: [1,2,3,4,5,6,7],
+               2: [8,9,10,11,12,13,14],
+               3: [15,16,17,18,19,20,21],
+               4: [22,23,24,25,26,27,28],
+               5: [29,30,31,32,33,34,35],
+               6: [36,37,38,39,40,41,42],
+               7: [43,44,45,46,47,48,49]
+           };
+           return sections[duan] || [];
+       }
+
+       function getHalfColorName(value) {
+           const names = ['红双', '红单', '蓝双', '蓝单', '绿双', '绿单'];
+           return names[value] || '红双';
+       }
+
+       function getNumbersByHalfColor(value) {
+           const halfColorMap = {
+               0: [2,8,12,18,24,30,34,40,46],
+               1: [1,7,13,19,23,29,35,45],
+               2: [4,10,14,20,26,36,42,48],
+               3: [3,9,15,25,31,37,41,47],
+               4: [6,16,22,28,32,38,44],
+               5: [5,11,17,21,27,33,39,43,49]
+           };
+           return halfColorMap[value] || [];
+       }
+
+       function getNumbersByElement(element, period) {
+           const year = parseInt(period.substring(0, 4));
+           const config = elementConfigs[year] || elementConfigs[2025];
+           return config[element] || [];
+       }
+
+       function getBigSmallOddEvenName(value) {
+           const names = ['小双', '小单', '大双', '大单'];
+           return names[value] || '小双';
+       }
+
+       function getNumbersByBigSmallOddEven(value) {
+           const dxdMap = {
+               0: [2,4,6,8,10,12,14,16,18,20,22,24],
+               1: [1,3,5,7,9,11,13,15,17,19,21,23],
+               2: [26,28,30,32,34,36,38,40,42,44,46,48],
+               3: [25,27,29,31,33,35,37,39,41,43,45,47,49]
+           };
+           return dxdMap[value] || [];
+       }
+
+       function getNumbersByOddEven(value) {
+           const numbers = [];
+           for (let i = 1; i <= 49; i++) {
+               if ((i % 2 === 0 && value === 0) || (i % 2 === 1 && value === 1)) {
+                   numbers.push(i);
+               }
+           }
+           return numbers;
+       }
+
+       function getNumbersByBigSmall(value) {
+           const numbers = [];
+           for (let i = 1; i <= 49; i++) {
+               if ((i <= 24 && value === 0) || (i >= 25 && value === 1)) {
+                   numbers.push(i);
+               }
+           }
+           return numbers;
+       }
+
+       function getNumbersByHeBigSmall(value) {
+           const numbers = [];
+           for (let i = 1; i <= 49; i++) {
+               const he = Math.floor(i / 10) + (i % 10);
+               if ((he <= 6 && value === 0) || (he >= 7 && value === 1)) {
+                   numbers.push(i);
+               }
+           }
+           return numbers;
+       }
+
+       function getNumbersByHeOddEven(value) {
+           const numbers = [];
+           for (let i = 1; i <= 49; i++) {
+               const he = Math.floor(i / 10) + (i % 10);
+               if ((he % 2 === 0 && value === 0) || (he % 2 === 1 && value === 1)) {
+                   numbers.push(i);
+               }
+           }
+           return numbers;
+       }
+
+       function getNumbersByWeiBigSmall(value) {
+           const numbers = [];
+           for (let i = 1; i <= 49; i++) {
+               const wei = i % 10;
+               if ((wei <= 4 && value === 0) || (wei >= 5 && value === 1)) {
+                   numbers.push(i);
+               }
+           }
+           return numbers;
+       }
+
+       function getNumbersByYu7(value) {
+           const yu7Map = {
+               0: [7,14,21,28,35,42,49],
+               1: [1,8,15,22,29,36,43],
+               2: [2,9,16,23,30,37,44],
+               3: [3,10,17,24,31,38,45],
+               4: [4,11,18,25,32,39,46],
+               5: [5,12,19,26,33,40,47],
+               6: [6,13,20,27,34,41,48]
+           };
+           return yu7Map[value] || [];
+       }
+
+       function getNumbersByYu6(value) {
+           const yu6Map = {
+               0: [6,12,18,24,30,36,42,48],
+               1: [1,7,13,19,25,31,37,43,49],
+               2: [2,8,14,20,26,32,38,44],
+               3: [3,9,15,21,27,33,39,45],
+               4: [4,10,16,22,28,34,40,46],
+               5: [5,11,17,23,29,35,41,47]
+           };
+           return yu6Map[value] || [];
+       }
+
+       function getNumbersByYu5(value) {
+           const yu5Map = {
+               0: [5,10,15,20,25,30,35,40,45],
+               1: [1,6,11,16,21,26,31,36,41,46],
+               2: [2,7,12,17,22,27,32,37,42,47],
+               3: [3,8,13,18,23,28,33,38,43,48],
+               4: [4,9,14,19,24,29,34,39,44,49]
+           };
+           return yu5Map[value] || [];
+       }
+
+       function getNumbersByYu4(value) {
+           const yu4Map = {
+               0: [4,8,12,16,20,24,28,32,36,40,44,48],
+               1: [1,5,9,13,17,21,25,29,33,37,41,45,49],
+               2: [2,6,10,14,18,22,26,30,34,38,42,46],
+               3: [3,7,11,15,19,23,27,31,35,39,43,47]
+           };
+           return yu4Map[value] || [];
+       }
+
+       function getNumbersByYu3(value) {
+           const yu3Map = {
+               0: [3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48],
+               1: [1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49],
+               2: [2,5,8,11,14,17,20,23,26,29,32,35,38,41,44,47]
+           };
+           return yu3Map[value] || [];
+       }
+
+       function getNumbersByHe(heValue) {
+           const heMap = {
+               1: [1,10],
+               2: [2,11,20],
+               3: [3,12,21,30],
+               4: [4,13,22,31,40],
+               5: [5,14,23,32,41],
+               6: [6,15,24,33,42],
+               7: [7,16,25,34,43],
+               8: [8,17,26,35,44],
+               9: [9,18,27,36,45],
+               10: [19,28,37,46],
+               11: [29,38,47],
+               12: [39,48],
+               13: [49]
+           };
+           return heMap[heValue] || [];
+       }
+
+       function getHalfHeadName(value) {
+           const names = {
+               0: '0头双', 1: '0头单', 2: '1头双', 3: '1头单',
+               4: '2头双', 5: '2头单', 6: '3头双', 7: '3头单',
+               8: '4头双', 9: '4头单'
+           };
+           return names[value] || '0头双';
+       }
+
+       function getNumbersByHalfHead(value) {
+           const halfHeadMap = {
+               0: [2,4,6,8],
+               1: [1,3,5,7,9],
+               2: [10,12,14,16,18],
+               3: [11,13,15,17,19],
+               4: [20,22,24,26,28],
+               5: [21,23,25,27,29],
+               6: [30,32,34,36,38],
+               7: [31,33,35,37,39],
+               8: [40,42,44,46,48],
+               9: [41,43,45,47,49]
+           };
+           return halfHeadMap[value] || [];
+       }
+
+       function getNumbersBySevenZodiac(value, period) {
+           const year = parseInt(period.substring(0, 4));
+           const zodiacData = zodiacYearData[year] || zodiacYearData[2025];
+           const zodiacNames = Object.keys(zodiacData.mapping);
+           
+           const numbers = [];
+           for (let i = -3; i <= 3; i++) {
+               let index = (value + i + 12) % 12;
+               const zodiacName = zodiacNames[index];
+               numbers.push(...zodiacData.mapping[zodiacName]);
+           }
+           return [...new Set(numbers)];
+       }
+
+       function getNumbersByNineZodiac(value, period) {
+           const year = parseInt(period.substring(0, 4));
+           const zodiacData = zodiacYearData[year] || zodiacYearData[2025];
+           const zodiacNames = Object.keys(zodiacData.mapping);
+           
+           const numbers = [];
+           for (let i = -4; i <= 4; i++) {
+               let index = (value + i + 12) % 12;
+               const zodiacName = zodiacNames[index];
+               numbers.push(...zodiacData.mapping[zodiacName]);
+           }
+           return [...new Set(numbers)];
+       }
+
+       function getNumbersByPingteZodiac(value, period) {
+           const year = parseInt(period.substring(0, 4));
+           const zodiacData = zodiacYearData[year] || zodiacYearData[2025];
+           const zodiacNames = Object.keys(zodiacData.mapping);
+           const zodiacName = zodiacNames[value];
+           
+           return zodiacData.mapping[zodiacName] || [];
+       }
+
+       // 验证杀项是否出现
+       function verifyKillAppeared(killResult, killType, nextData, verifyTarget) {
+           let numbersToCheck = [];
+           if (verifyTarget === '特码') {
+               numbersToCheck = [nextData.special];
+           } else if (verifyTarget === '平码') {
+               numbersToCheck = nextData.numbers;
+           } else if (verifyTarget === '平特') {
+               numbersToCheck = [...nextData.numbers, nextData.special];
+           } else if (verifyTarget.startsWith('平')) {
+               const pos = parseInt(verifyTarget.replace('平', '').replace('位', '')) - 1;
+               numbersToCheck = [nextData.numbers[pos]];
+           }
+           for (let num of numbersToCheck) {
+               if (killResult.numbers.includes(num)) return true;
+           }
+           return false;
+       }
+
+       // 计算统计信息
+       function calculateStats(results) {
+           const total = results.length;
+           const hits = results.filter(r => r.isHit).length;
+           const hitRate = total > 0 ? ((hits / total) * 100).toFixed(2) : 0;
+           
+           let maxWin = 0, maxLose = 0, currentWin = 0, currentLose = 0;
+           results.forEach(result => {
+               if (result.isHit) {
+                   currentWin++;
+                   currentLose = 0;
+                   maxWin = Math.max(maxWin, currentWin);
+               } else {
+                   currentLose++;
+                   currentWin = 0;
+                   maxLose = Math.max(maxLose, currentLose);
+               }
+               result.currentStreak = result.isHit ? currentWin : -currentLose;
+           });
+           
+           return { total, hits, misses: total - hits, hitRate, maxWin, maxLose };
+       }
+
+       // 生成统计HTML
+       function generateStatsHTML(stats) {
+           return `
+               <div class="stat-card"><div class="label">总验证期数</div><div class="value">${stats.total}</div></div>
+               <div class="stat-card"><div class="label">命中次数</div><div class="value">${stats.hits}</div></div>
+               <div class="stat-card"><div class="label">未中次数</div><div class="value">${stats.misses}</div></div>
+               <div class="stat-card"><div class="label">命中率</div><div class="value">${stats.hitRate}%</div></div>
+               <div class="stat-card"><div class="label">最大连对</div><div class="value">${stats.maxWin}期</div></div>
+               <div class="stat-card"><div class="label">最大连错</div><div class="value">${stats.maxLose}期</div></div>
+           `;
+       }
+
+       // 生成结果表格
+       function generateResultTable(results) {
+           let html = `
+               <table class="result-table">
+                   <thead>
+                       <tr>
+                           <th>期号</th>
+                           <th>开奖号码</th>
+                           <th>详细计算</th>
+                           <th>计算值</th>
+                           <th>杀项</th>
+                           <th>状态</th>
+                           <th>连续</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+           `;
+           results.forEach(result => {
+               const numbersDisplay = result.numbers.map(n => String(n).padStart(2, '0')).join(' ');
+               const specialDisplay = String(result.special).padStart(2, '0');
+               const calcDetailHTML = result.calcDetails.map(d => `<div class="calc-step">${d}</div>`).join('');
+               const streakText = result.currentStreak > 0 ? `连对${result.currentStreak}` : `连错${Math.abs(result.currentStreak)}`;
+               html += `
+                   <tr>
+                       <td>${result.period}</td>
+                       <td style="font-family: monospace;">${numbersDisplay} <span style="color:red">+${specialDisplay}</span></td>
+                       <td style="text-align: left;"><div class="calc-detail">${calcDetailHTML}</div></td>
+                       <td><strong>${result.calcValue}</strong></td>
+                       <td><strong>${result.killType}: ${result.killResult.display}</strong></td>
+                       <td class="${result.isHit ? 'hit' : 'miss'}">${result.isHit ? '✅ 命中' : '❌ 未中'}</td>
+                       <td>${streakText}</td>
+                   </tr>
+               `;
+           });
+           html += '</tbody></table>';
+           return html;
+       }
+
+       // 导出到Excel
+       function exportToExcel() {
+           if (calculationResults.length === 0 && batchResults.length === 0) {
+               alert('❌ 没有可导出的数据！');
+               return;
+           }
+           let csv = '\uFEFF';
+           if (batchResults.length > 0) {
+               batchResults.forEach((batch, index) => {
+                   csv += `\n公式${index + 1}: ${batch.formula}\n`;
+                   csv += '期号,开奖号码,计算过程,计算值,杀项,状态\n';
+                   batch.results.forEach(r => {
+                       const numbers = r.numbers.map(n => String(n).padStart(2, '0')).join(' ') + ' + ' + String(r.special).padStart(2, '0');
+                       const calcProcess = r.calcDetails.join(' + ');
+                       const status = r.isHit ? '命中' : '未中';
+                       csv += `${r.period},"${numbers}","${calcProcess}",${r.calcValue},${r.killResult.display},${status}\n`;
+                   });
+               });
+           } else {
+               csv += '期号,开奖号码,计算过程,计算值,杀项,状态\n';
+               calculationResults.forEach(r => {
+                   const numbers = r.numbers.map(n => String(n).padStart(2, '0')).join(' ') + ' + ' + String(r.special).padStart(2, '0');
+                   const calcProcess = r.calcDetails.join(' + ');
+                   const status = r.isHit ? '命中' : '未中';
+                   csv += `${r.period},"${numbers}","${calcProcess}",${r.calcValue},${r.killResult.display},${status}\n`;
+               });
+           }
+           
+           const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+           const link = document.createElement('a');
+           link.href = URL.createObjectURL(blob);
+           link.download = `六合公式验证_${new Date().getTime()}.csv`;
+           link.click();
+       }
+
+       // 显示消息
+       function showMessage(elementId, message, type) {
+           const element = document.getElementById(elementId);
+           element.className = type === 'error' ? 'error-message' : 'success-message';
+           element.textContent = message;
+           element.style.display = 'block';
+           setTimeout(() => element.style.display = 'none', 3000);
+       }
+
+       // 页面加载时初始化
+       window.onload = function() {
+           const exampleData = `2025001 37 34 09 46 16 30 33
+2025002 16 27 28 33 12 38 44
+2025003 39 49 03 20 25 43 38`;
+           document.getElementById('dataInput').value = exampleData;
+           updateSettings();
+       };
+   </script>
+</body>
+</html>
